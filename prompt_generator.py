@@ -1,4 +1,5 @@
 import random
+import streamlit as st
 
 class PromptGenerator:
     def __init__(self):
@@ -37,6 +38,12 @@ class PromptGenerator:
         
         return f"{subject}, {environment}, {style}, {lighting}, {camera}, --ar 16:9"
 
+# Web App Interface
+st.title("Cinematic Prompt Generator")
+st.write("Click the button below to generate a new AI image prompt.")
+
 generator = PromptGenerator()
-print(generator.generate_random_prompt())
-      
+
+if st.button("Generate Prompt"):
+    result = generator.generate_random_prompt()
+    st.code(result)
