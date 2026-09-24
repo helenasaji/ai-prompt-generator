@@ -19,7 +19,8 @@
                 <textarea id="idea" placeholder="e.g., A girl standing in Kerala mountains..." rows="3"></textarea>
             </div>
 
-            <div class="controls">
+            <!-- START OF BUILDER DROPDOWNS -->
+            <div class="builder-grid">
                 <div class="input-group">
                     <label for="category">Category</label>
                     <select id="category">
@@ -29,7 +30,39 @@
                         <option value="json">{} JSON Data</option>
                     </select>
                 </div>
+
+                <div class="input-group">
+                    <label for="style">Style</label>
+                    <select id="style">
+                        <option value="surprise">🎲 Surprise Me</option>
+                        <option value="photorealistic, highly detailed">Photorealistic</option>
+                        <option value="cinematic, dramatic, movie still">Cinematic</option>
+                        <option value="cyberpunk, neon-lit, futuristic">Cyberpunk</option>
+                        <option value="anime style, Studio Ghibli">Anime / Ghibli</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="lighting">Lighting</label>
+                    <select id="lighting">
+                        <option value="surprise">🎲 Surprise Me</option>
+                        <option value="golden hour lighting, warm glow">Golden Hour</option>
+                        <option value="moody lighting, high contrast">Moody & Dark</option>
+                        <option value="studio lighting, softbox">Studio Lighting</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="camera">Camera</label>
+                    <select id="camera">
+                        <option value="surprise">🎲 Surprise Me</option>
+                        <option value="shot on 35mm lens, wide angle">Wide Angle (35mm)</option>
+                        <option value="macro photography, shallow depth of field">Macro (Close-up)</option>
+                        <option value="drone shot, aerial view">Aerial / Drone</option>
+                    </select>
+                </div>
             </div>
+            <!-- END OF BUILDER DROPDOWNS -->
 
             <button id="generate-btn">✨ Generate Prompt</button>
 
