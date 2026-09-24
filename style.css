@@ -71,16 +71,6 @@ button {
     width: 100%;
     transition: opacity 0.2s;
 }
-.builder-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.builder-grid .input-group {
-    margin-bottom: 0; 
-}
 
 button:hover {
     opacity: 0.8;
@@ -112,3 +102,15 @@ button:hover {
 #copy-btn:hover {
     background-color: var(--border-color);
 }
+
+.builder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.builder-grid .input-group {
+    margin-bottom: 0; 
+}
+
