@@ -1,0 +1,104 @@
+:root {
+    /* Easily change this hex code to your preferred highlight color */
+    --accent-color: #10b981; 
+    --bg-color: #0d1117;
+    --card-bg: #161b22;
+    --text-main: #c9d1d9;
+    --border-color: #30363d;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin: 0;
+}
+
+.container {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+header h1 {
+    margin-top: 0;
+    color: var(--accent-color);
+    font-size: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+textarea, select {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.8rem;
+    font-family: inherit;
+    resize: vertical;
+}
+
+textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+button {
+    background-color: var(--accent-color);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.output-section {
+    margin-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+}
+
+.output-box {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    min-height: 80px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+#copy-btn {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    width: auto;
+}
+
+#copy-btn:hover {
+    background-color: var(--border-color);
+}
