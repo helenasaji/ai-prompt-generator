@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Prompt Generator</title>
-  </head>
-  <body>
-    <h1>AI Prompt Generator</h1>
-    <p>This app runs with Streamlit.</p>
-  </body>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✦ AI Prompt Generator</h1>
+            <p>Turn simple ideas into structured prompts.</p>
+        </header>
+
+        <main>
+            <div class="input-group">
+                <label for="idea">What do you want to create?</label>
+                <textarea id="idea" placeholder="e.g., A girl standing in Kerala mountains..." rows="3"></textarea>
+            </div>
+
+            <div class="controls">
+                <div class="input-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="image">🖼️ Image Generation</option>
+                        <option value="coding">💻 Coding</option>
+                        <option value="writing">✍️ Writing</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="generate-btn">✨ Generate Prompt</button>
+
+            <div class="output-section">
+                <label>Generated Prompt</label>
+                <div id="output-box" class="output-box">Your generated prompt will appear here...</div>
+                <button id="copy-btn">📋 Copy</button>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
