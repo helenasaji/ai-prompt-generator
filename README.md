@@ -1,26 +1,40 @@
 # ✦ AI Prompt Generator
 
-A sleek, client-side web application designed to help users structure, refine, and generate highly detailed prompts for AI image generators, coding assistants, and writing tools. 
+A modern full-stack web application that transforms raw ideas into structured, high-fidelity prompts for generative AI models, image engines, and coding assistants. Powered by a serverless backend integrated with the Google Gemini API.
 
-## 🚀 Features
-- **Prompt Builder:** Granular dropdown controls for Style, Lighting, and Camera angles.
-- **Dynamic Templating:** Automatically injects user variables into optimized prompt structures.
-- **Multi-Discipline:** Supports Image Generation, Coding, and Writing prompt formats.
-- **Copy to Clipboard:** One-click copying with visual feedback.
-- **Dark UI:** A modern, luxury dark-mode aesthetic built with vanilla CSS.
+[🚀 **Live Demo**](https://ai-prompt-generator-black-seven.vercel.app)
 
-## 🛠️ Tech Stack
-- **HTML5:** Semantic structure.
-- **CSS3:** Custom variables, CSS Grid, and responsive design.
-- **Vanilla JavaScript (ES6+):** DOM manipulation, event handling, and string templating.
-- **GitHub Pages:** Live deployment and hosting.
+---
 
-## 📂 Project Structure
+## ✨ Features
+
+- **Prompt Builder:** Granular controls for Style, Lighting, Camera angles, and Domain categories.
+- **AI-Powered Expansion:** Uses Google Gemini to expand raw concepts into comprehensive 75–100+ word structured prompts.
+- **Secure Serverless Proxy:** Keeps API keys hidden from client-side code using Vercel Serverless Functions.
+- **Copy to Clipboard:** One-click prompt copying with instant UI feedback.
+- **History Tracking:** Local storage caching for quick access to previously generated prompts.
+- **Responsive Dark Mode:** Built with vanilla CSS grid, flexbox, and modern glassmorphic styling.
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript (ES6+)
+- **Backend:** Node.js (Vercel Serverless Functions)
+- **AI Integration:** Google Gemini API (`gemini-3.8-flash`)
+- **Hosting & CI/CD:** Vercel
+
+---
+
+## 📁 Project Structure
+
 ```text
 ai-prompt-generator/
-├── index.html    # Main UI skeleton
-├── style.css     # Styling and layout
-├── script.js     # DOM manipulation and event listeners
-├── data.js       # Data objects for templates and scoring
-├── README.md     # Project documentation
-└── LICENSE       # Open source license
+├── api/
+│   └── index.js         # Serverless function proxying Gemini API requests
+├── index.html           # Core application markup
+├── style.css            # Dark mode UI, layout, and animations
+├── script.js           # Client-side UI logic, state, and fetch handlers
+├── vercel.json          # Routing and serverless function rewrite rules
+├── .gitignore           # Ignores sensitive environment files
+└── README.md            # Project documentation
