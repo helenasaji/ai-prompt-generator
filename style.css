@@ -7,11 +7,13 @@
     --glass-focus: rgba(0, 0, 0, 0.3);
 }
 
-/* Vibrant Background to show off the glass effect */
+/* Dark fallback to hide any white edges during heavy scrolling */
+html {
+    background-color: #0f172a; 
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
-    background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
     margin: 0;
@@ -19,6 +21,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* This perfectly fixes the mobile gradient scroll bug */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
+    z-index: -1;
 }
 
 /* Frosted Glass Container */
