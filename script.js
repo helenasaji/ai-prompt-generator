@@ -1,12 +1,19 @@
-// Main generator logic connecting to Vercel Backend
 async function generatePrompt() {
     const category = document.getElementById('category').value;
     const subject = document.getElementById('idea').value.trim();
     const outputBox = document.getElementById('output-box');
+    const generateBtn = document.getElementById('generate-btn');
     
     if (!subject) return alert("Please enter a subject first!");
 
-    outputBox.innerText = "✨ AI is working its magic securely through Vercel...";
+    // Disable button & inject spinner state
+    generateBtn.disabled = true;
+    outputBox.innerHTML = `
+        <div class="loading-state">
+            <span class="spinner"></span>
+            <span>Crafting prompt with Gemini...</span>
+        </div>
+    `;
 
     const style = document.getElementById('style')?.value || "Not specified";
     const lighting = document.getElementById('lighting')?.value || "Not specified";
@@ -39,11 +46,12 @@ async function generatePrompt() {
         saveHistory(data.result);
 
     } catch (error) {
-        outputBox.innerText = "⚠️ Error connecting to backend: " + error.message;
+        outputBox.innerText = "⚠️ API Notice: " + error.message;
         console.error(error);
+    } finally {
+        generateBtn.disabled = false;
     }
 }
-
 // Append enhancement keywords
 function improvePrompt() {
     const current = document.getElementById('output-box').innerText;
