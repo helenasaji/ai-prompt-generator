@@ -1,5 +1,4 @@
 module.exports = async (req, res) => {
-    // Only allow POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ error: "Method not allowed" });
     }
@@ -11,7 +10,7 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: "API key is missing on the server." });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
@@ -27,8 +26,6 @@ module.exports = async (req, res) => {
         if (!response.ok) {
             return res.status(500).json({ error: data.error?.message || "Google API Error" });
         }
-
-        // Send the AI's text back to your frontend
         return res.status(200).json({ result: data.candidates[0].content.parts[0].text });
 
     } catch (error) {
