@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: "API key is missing on the server." });
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
