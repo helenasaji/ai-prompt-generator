@@ -1,5 +1,5 @@
 async function generatePrompt() {
-    const category = document.getElementById('category').value;
+    const format = document.getElementById('format').value;
     const subject = document.getElementById('idea').value.trim();
     const outputBox = document.getElementById('output-box');
     const generateBtn = document.getElementById('generate-btn');
@@ -19,17 +19,33 @@ async function generatePrompt() {
     const lighting = document.getElementById('lighting')?.value || "Not specified";
     const camera = document.getElementById('camera')?.value || "Not specified";
 
-    const promptInstruction = `
-        You are an expert prompt engineer. The user wants to generate a prompt for the category: ${category}. 
-        Their raw idea is: "${subject}".
+    let promptInstruction = `
+        You are an expert AI image prompt engineer. The user's raw idea is: "${subject}".
         Additional settings: Style="${style}", Lighting="${lighting}", Camera="${camera}".
         
         Your task:
         1. Fix any spelling or grammar mistakes.
-        2. Expand the idea into a very long, highly detailed, and professional prompt (at least 75-100 words).
-        3. If it is an image prompt, strictly include the requested camera angles, lighting conditions, and mood.
-        4. Output ONLY the final generated prompt text. Do not talk to me, do not use markdown, just give me the raw text.
+        2. Expand the idea into a highly detailed, professional image generation prompt (at least 75-100 words).
+        3. Strictly include the requested camera angles, lighting conditions, and mood.
     `;
+
+    if (format === "JSON") {
+        promptInstruction += `
+        4. OUTPUT FORMAT: You must return the prompt ONLY as a valid, parsable JSON object. 
+        Use this exact structure:
+        {
+            "prompt": "The detailed descriptive text here",
+            "negative_prompt": "Things to avoid, bad quality, blurry, etc.",
+            "style": "${style}",
+            "lighting": "${lighting}",
+            "camera": "${camera}"
+        }
+        Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Return ONLY the raw JSON text.`;
+    } else {
+        promptInstruction += `
+        4. OUTPUT FORMAT: Output ONLY the final generated prompt text as a plain paragraph. 
+        Do not talk to me, do not use markdown, just give me the raw text.`;
+    }
 
     try {
         const response = await fetch("/api/generate", {
@@ -52,6 +68,7 @@ async function generatePrompt() {
         generateBtn.disabled = false;
     }
 }
+
 // Append enhancement keywords
 function improvePrompt() {
     const current = document.getElementById('output-box').innerText;
