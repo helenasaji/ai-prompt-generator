@@ -1,32 +1,34 @@
 const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(cors()); // Allows your frontend to communicate with this backend
 app.use(express.json());
 
-// Test route to ensure the server is running
-app.get('/api/status', (req, res) => {
-    res.json({ message: "Backend is running securely." });
-});
-
-// Future AI Generation Route
 app.post('/api/generate', async (req, res) => {
-    const { prompt } = req.body;
-    
-    // 1. You will take the prompt from the frontend
-    // 2. Attach process.env.AI_API_KEY securely here
-    // 3. Send the request to the AI provider
-    // 4. Send the result back to the frontend
-    
-    res.json({ success: true, pending: "AI integration coming soon!" });
+    const { promptInstruction } = req.body;
+    const API_KEY = process.env.GEMINI_API_KEY; 
+
+    if (!API_KEY) {
+        return res.status(500).json({ error: "API key is missing on the server." });
+    }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: promptInstruction }] }]
+            })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error?.message || "Google API Error");
+        res.json({ result: data.candidates[0].content.parts[0].text });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
-
+// CRITICAL FOR VERCEL: Export the app instead of app.listen()
+module.exports = app;
