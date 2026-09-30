@@ -1,8 +1,9 @@
-const express = require('express');
-const app = express();
-app.use(express.json());
+module.exports = async (req, res) => {
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: "Method not allowed" });
+    }
 
-app.post('/api/generate', async (req, res) => {
     const { promptInstruction } = req.body;
     const API_KEY = process.env.GEMINI_API_KEY; 
 
@@ -22,13 +23,15 @@ app.post('/api/generate', async (req, res) => {
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error?.message || "Google API Error");
-        res.json({ result: data.candidates[0].content.parts[0].text });
+        
+        if (!response.ok) {
+            return res.status(500).json({ error: data.error?.message || "Google API Error" });
+        }
+
+        // Send the AI's text back to your frontend
+        return res.status(200).json({ result: data.candidates[0].content.parts[0].text });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
-});
-
-// CRITICAL FOR VERCEL: Export the app instead of app.listen()
-module.exports = app;
+};
