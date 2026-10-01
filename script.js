@@ -1,12 +1,3 @@
-// 1. Basic History Save Function (prevents errors when called later)
-function saveHistory(promptText) {
-    let history = JSON.parse(localStorage.getItem('promptHistory')) || [];
-    history.unshift(promptText);
-    if (history.length > 5) history.pop(); // Keeps the last 5 prompts
-    localStorage.setItem('promptHistory', JSON.stringify(history));
-}
-
-// 2. Main API Call & UI Logic
 async function generatePrompt() {
     const format = document.getElementById('format').value;
     const subject = document.getElementById('idea').value.trim();
@@ -43,13 +34,17 @@ async function generatePrompt() {
         4. OUTPUT FORMAT: You must return the prompt ONLY as a valid, parsable JSON object. 
         Use this exact structure:
         {
-            "prompt": "The detailed descriptive text here",
-            "negative_prompt": "Things to avoid, bad quality, blurry, etc.",
+            "subject_details": "Detailed visual description of the main subject",
+            "background_environment": "Detailed description of the setting and surroundings",
+            "color_palette": "Primary colors, tones, and contrast",
+            "mood_and_atmosphere": "The emotional feel of the image",
+            "master_prompt": "The full, combined long-form prompt (75-100 words)",
+            "negative_prompt": "Things to avoid, bad quality, blurry, extra limbs, bad anatomy",
             "style": "${style}",
             "lighting": "${lighting}",
             "camera": "${camera}"
         }
-        Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Return ONLY the raw JSON text.`;
+        Do NOT wrap the JSON in markdown blocks (no \`\`\`json). Return ONLY the raw JSON object.`;
     } else {
         promptInstruction += `
         4. OUTPUT FORMAT: Output ONLY the final generated prompt text as a plain paragraph. 
@@ -67,8 +62,24 @@ async function generatePrompt() {
 
         if (!response.ok) throw new Error(data.error || "Backend Error");
         
-        outputBox.innerText = data.result;
-        saveHistory(data.result);
+        let finalOutput = data.result;
+
+        // Clean and Prettify JSON if that format was selected
+        if (format === "JSON") {
+            // Strip out any markdown formatting the AI stubbornly included
+            finalOutput = finalOutput.replace(/```json/gi, "").replace(/```/g, "").trim();
+            
+            try {
+                // Parse and re-stringify with 4 spaces for beautiful indentation
+                const parsedJSON = JSON.parse(finalOutput);
+                finalOutput = JSON.stringify(parsedJSON, null, 4);
+            } catch (parseError) {
+                console.warn("Could not perfectly format JSON, outputting raw text instead.");
+            }
+        }
+        
+        outputBox.innerText = finalOutput;
+        saveHistory(finalOutput);
 
     } catch (error) {
         outputBox.innerText = "⚠️ API Notice: " + error.message;
@@ -77,37 +88,3 @@ async function generatePrompt() {
         generateBtn.disabled = false;
     }
 }
-
-// 3. Event Listener for the Generate Button
-document.getElementById('generate-btn').addEventListener('click', generatePrompt);
-
-// 4. Event Listener for the Copy Button
-document.getElementById('copy-btn').addEventListener('click', async () => {
-    const outputBox = document.getElementById('output-box');
-    const copyBtn = document.getElementById('copy-btn');
-    const textToCopy = outputBox.innerText;
-
-    // Prevent copying if the box is empty, showing the placeholder, or currently loading
-    if (!textToCopy || 
-        textToCopy === "Your generated prompt will appear here..." || 
-        textToCopy.includes("Crafting prompt")) {
-        return; 
-    }
-
-    try {
-        // Modern async clipboard API
-        await navigator.clipboard.writeText(textToCopy);
-        
-        // Visual feedback
-        copyBtn.innerText = "✅ Copied!";
-        
-        // Reset the button text after 2 seconds
-        setTimeout(() => {
-            copyBtn.innerText = "📋 Copy";
-        }, 2000);
-        
-    } catch (err) {
-        console.error("Failed to copy text: ", err);
-        alert("Failed to copy text to clipboard. Your browser might block this feature.");
-    }
-});
