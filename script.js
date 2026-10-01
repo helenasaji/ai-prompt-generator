@@ -1,3 +1,12 @@
+// 1. Basic History Save Function (prevents errors when called later)
+function saveHistory(promptText) {
+    let history = JSON.parse(localStorage.getItem('promptHistory')) || [];
+    history.unshift(promptText);
+    if (history.length > 5) history.pop(); // Keeps the last 5 prompts
+    localStorage.setItem('promptHistory', JSON.stringify(history));
+}
+
+// 2. Main API Call & UI Logic
 async function generatePrompt() {
     const format = document.getElementById('format').value;
     const subject = document.getElementById('idea').value.trim();
@@ -69,64 +78,36 @@ async function generatePrompt() {
     }
 }
 
-// Append enhancement keywords
-function improvePrompt() {
-    const current = document.getElementById('output-box').innerText;
-    if (!current || current.includes("Your generated prompt") || current.includes("⚠️")) {
-        return alert("Generate a valid prompt first!");
+// 3. Event Listener for the Generate Button
+document.getElementById('generate-btn').addEventListener('click', generatePrompt);
+
+// 4. Event Listener for the Copy Button
+document.getElementById('copy-btn').addEventListener('click', async () => {
+    const outputBox = document.getElementById('output-box');
+    const copyBtn = document.getElementById('copy-btn');
+    const textToCopy = outputBox.innerText;
+
+    // Prevent copying if the box is empty, showing the placeholder, or currently loading
+    if (!textToCopy || 
+        textToCopy === "Your generated prompt will appear here..." || 
+        textToCopy.includes("Crafting prompt")) {
+        return; 
     }
-    
-    document.getElementById('output-box').innerText = current + " Make it highly detailed, professional, and visually stunning. Use best practices.";
-}
 
-// Clipboard copy logic
-function copyPrompt() {
-    const textToCopy = document.getElementById('output-box').innerText;
-    if (textToCopy && !textToCopy.includes("⚠️") && !textToCopy.includes("✨")) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            const copyBtn = document.getElementById('copy-btn');
-            copyBtn.innerText = "✓ Copied!";
-            setTimeout(() => { copyBtn.innerText = "📋 Copy Prompt"; }, 2000);
-        });
+    try {
+        // Modern async clipboard API
+        await navigator.clipboard.writeText(textToCopy);
+        
+        // Visual feedback
+        copyBtn.innerText = "✅ Copied!";
+        
+        // Reset the button text after 2 seconds
+        setTimeout(() => {
+            copyBtn.innerText = "📋 Copy";
+        }, 2000);
+        
+    } catch (err) {
+        console.error("Failed to copy text: ", err);
+        alert("Failed to copy text to clipboard. Your browser might block this feature.");
     }
-}
-
-// Save to localStorage
-function saveHistory(promptText) {
-    let history = JSON.parse(localStorage.getItem('promptHistory')) || [];
-    history.unshift(promptText);
-    
-    if (history.length > 10) history.pop();
-    
-    localStorage.setItem('promptHistory', JSON.stringify(history));
-    loadHistory();
-}
-
-// Load and display history list
-function loadHistory() {
-    const historyList = document.getElementById('history-list'); 
-    if (!historyList) return;
-
-    historyList.innerHTML = "";
-    let history = JSON.parse(localStorage.getItem('promptHistory')) || [];
-
-    history.forEach((savedItem) => {
-        const li = document.createElement('li');
-        li.innerText = savedItem.length > 40 ? savedItem.substring(0, 40) + "..." : savedItem;
-        
-        li.addEventListener('click', () => {
-            document.getElementById('output-box').innerText = savedItem;
-        });
-        
-        historyList.appendChild(li);
-    });
-}
-
-// Attach event listeners on page load
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('generate-btn')?.addEventListener('click', generatePrompt);
-    document.getElementById('improve-btn')?.addEventListener('click', improvePrompt);
-    document.getElementById('copy-btn')?.addEventListener('click', copyPrompt);
-    
-    loadHistory();
 });
